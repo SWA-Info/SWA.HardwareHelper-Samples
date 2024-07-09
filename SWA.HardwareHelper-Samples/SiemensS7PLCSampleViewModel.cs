@@ -100,7 +100,7 @@ namespace SWA.HardwareHelper_Samples
         PLC_DataItem item = new(this.Item_NameString, Item_SubscribeMode);
         if (null != item) 
         {
-          //item.SubscribedValue = S7PLC_Helper.GetCSharpTypeValue(this.Item_VarType, this.Item_SubscribedValue, (int)this.Item_Count);
+          item.SubscribedValue = S7PLC_Helper.GetCSharpTypeValue(this.Item_VarType, this.Item_SubscribedValue, (int)this.Item_Count);
           item.ItemCount = this.Item_Count;
           _plc.DataItems.Add(item);
           OnPropertyChanged(nameof(MonitoringItems));
