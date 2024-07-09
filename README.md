@@ -25,5 +25,5 @@ Samples can be found in [SWA_HardwareHelper_Samples](https://github.com/SWA-Info
 [SWA.HardwareHelper-Samples](https://github.com/SWA-Info/SWA_HardwareHelper_Samples)
 
 ## Documents
-* [Serial Port](SWA.HardwareHelper/Documents/SerialPort.md)
-* [S7 PLC](SWA.HardwareHelper/Documents/S7Plc.md)
+* [Serial Port](SWA.HardwareHelper-Samples/Documents/SerialPort.md)
+* [S7 PLC](SWA.HardwareHelper-Samples/Documents/S7Plc.md)
