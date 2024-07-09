@@ -10,6 +10,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Documents\README.md" />
+    <None Remove="Documents\S7Plc.md" />
+    <None Remove="Documents\SerialPort.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Documents\README.md" />
+    <Content Include="Documents\S7Plc.md" />
+    <Content Include="Documents\SerialPort.md" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.122" />
     <PackageReference Include="SWA.HardwareHelper" Version="2.0.0" />
   </ItemGroup>
