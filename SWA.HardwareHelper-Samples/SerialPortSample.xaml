@@ -1,0 +1,149 @@
+﻿<UserControl x:Class="SWA.HardwareHelper_Samples.SerialPortSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:swa="clr-namespace:SWA.HardwareHelper;assembly=SWA.HardwareHelper"
+             xmlns:local="clr-namespace:SWA.HardwareHelper_Samples"
+             d:DataContext="{d:DesignInstance Type={x:Type local:SerialPortSampleViewModel}}"
+             mc:Ignorable="d" 
+             d:Background="Gray"
+             d:DesignHeight="450" d:DesignWidth="700">
+  <DockPanel>
+    <GroupBox DockPanel.Dock="Top" Header="Ports">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <ComboBox Margin="5" Grid.Row="0" Grid.Column="0" ItemsSource="{Binding SerialPortInfosAll}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate DataType="{x:Type swa:SerialPortInfo}">
+              <TextBlock Text="{Binding Name}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button Margin="5" Grid.Row="0" Grid.Column="1" Content="Refresh Serial Ports(All)">
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Click">
+              <i:CallMethodAction TargetObject="{Binding }" MethodName="ButtonRefreshSerialPortsAll_Click"/>
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </Button>
+        <ComboBox Margin="5" Grid.Row="1" Grid.Column="0" ItemsSource="{Binding SerialPortInfosIgnoreVirtual}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate DataType="{x:Type swa:SerialPortInfo}">
+              <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button Margin="5" Grid.Row="1" Grid.Column="1" Content=" Refresh Serial Ports(ignore Virtual) ">
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Click">
+              <i:CallMethodAction TargetObject="{Binding }" MethodName="ButtonRefreshSerialPortsIgnoreVirtual_Click"/>
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </Button>
+      </Grid>
+    </GroupBox>
+
+    <GroupBox DockPanel.Dock="Top" Header="Connection">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="auto"/>
+          <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+          <RadioButton x:Name="Radio_RecieveMode_FlagByte" Content="Flag Byte" IsChecked="{Binding Radio_RecieveMode_FlagByte_Checked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+          <TextBlock Text=" Hex String: "/>
+          <TextBox Text="{Binding FlagByteHexString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="30" MaxLength="2"/>
+
+          <RadioButton Margin="10 0 0 0" Content="Fixed Length" VerticalAlignment="Center"/>
+          <TextBlock Text=" in byte: "/>
+          <TextBox Text="{Binding FixedLengthInByte,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="50" MaxLength="5" InputScope="Number"/>
+        </StackPanel>
+        <WrapPanel Margin="5" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+          <TextBlock Margin="5 0 0 0" Text="Baud Rate: " VerticalAlignment="Center"/>
+          <ComboBox MinWidth="80" ItemsSource="{Binding SerialPortBaudRates}" SelectedValue="{Binding SerialPortBaudRate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBlock Margin="5 0 0 0" Text="Parity: " VerticalAlignment="Center"/>
+          <ComboBox MinWidth="60" ItemsSource="{Binding SerialPortParities}" SelectedValue="{Binding SerialPortParity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
+          <TextBlock Margin="5 0 0 0" Text="Data Length: " VerticalAlignment="Center"/>
+          <ComboBox MinWidth="40" ItemsSource="{Binding SerialPortDataBitLengths}" SelectedValue="{Binding SerialPortDataBitLength,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBlock Margin="5 0 0 0" Text="StopBits: " VerticalAlignment="Center"/>
+          <ComboBox MinWidth="110" ItemsSource="{Binding SerialPortStopBitsLengthes}" SelectedValue="{Binding SerialPortStopBitsLength,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+        </WrapPanel>
+        <ComboBox Margin="5" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding SerialPortInfos}" SelectedItem="{Binding SerialPortInfoSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate DataType="{x:Type swa:SerialPortInfo}">
+              <TextBlock Text="{Binding Name}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button Margin="5" Grid.Row="2" Grid.Column="1" Content=" Open ">
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Click">
+              <i:CallMethodAction TargetObject="{Binding }" MethodName="ButtonRefreshSerialPortOpen_Click"/>
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </Button>
+        <Button Margin="5" Grid.Row="2" Grid.Column="2" Content=" Close " IsEnabled="{Binding IsCloseButtonEnabled}">
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Click">
+              <i:CallMethodAction TargetObject="{Binding }" MethodName="ButtonRefreshSerialPortClose_Click"/>
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </Button>
+      </Grid>
+    </GroupBox>
+
+    <GroupBox DockPanel.Dock="Top" Header="Communication">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="auto"/>
+          <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Margin="5" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+          <TextBlock Text="Err: "/>
+          <TextBlock Text="{Binding RecievedErrorString,Mode=OneWay}"/>
+        </DockPanel>
+        
+        <TextBox Margin="5 5 0 5" Grid.Row="1" Grid.Column="0" Text="{Binding StringTobeSend,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"
+                MinHeight="40" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto"/>
+        <Button Margin="0 5 5 5" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Content=" Send " >
+          <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Click">
+              <i:CallMethodAction TargetObject="{Binding }" MethodName="ButtonRefreshSerialPortSend_Click"/>
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </Button>
+
+        <TextBlock Margin="5 5 0 0" Text="Data Recieved" Grid.Row="2" Grid.Column="0"/>
+        <TextBox Margin="5 0 5 5" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" IsReadOnly="True"
+               Text="{Binding RecievedDataString,Mode=OneWay}" 
+               TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto"/>
+      </Grid>
+    </GroupBox>
+  </DockPanel>
+</UserControl>

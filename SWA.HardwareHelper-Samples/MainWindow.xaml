@@ -1,0 +1,21 @@
+﻿<Window x:Class="SWA.HardwareHelper_Samples.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:swa="clr-namespace:SWA.HardwareHelper;assembly=SWA.HardwareHelper"
+        xmlns:local="clr-namespace:SWA.HardwareHelper_Samples"
+        d:DataContext="{d:DesignInstance Type={x:Type local:MainWindowViewModel}}"
+        mc:Ignorable="d"
+        Title="SWA.HardwareHelper Samples" Height="500" Width="800">
+  <TabControl>
+    <TabItem Header=" Serial Port " IsSelected="True">
+      <local:SerialPortSample DataContext="{Binding SerialPortSampleViewModel}"/>
+    </TabItem>
+    <TabItem Header=" Siemens S7 PLC ">
+      <local:SiemensS7PLCSample DataContext="{Binding SiemensS7PLCSampleViewModel}"/>
+    </TabItem>
+  </TabControl>
+  
+</Window>

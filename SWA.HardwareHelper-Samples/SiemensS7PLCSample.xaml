@@ -1,0 +1,206 @@
+﻿<UserControl x:Class="SWA.HardwareHelper_Samples.SiemensS7PLCSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:swa="clr-namespace:SWA.HardwareHelper;assembly=SWA.HardwareHelper"
+             xmlns:local="clr-namespace:SWA.HardwareHelper_Samples"
+             d:DataContext="{d:DesignInstance Type={x:Type local:SiemensS7PLCSampleViewModel}}"
+             mc:Ignorable="d" 
+             d:Background="Gray"
+             d:DesignHeight="500" d:DesignWidth="850">
+  <UserControl.Resources>
+    <Style TargetType="ToggleButton">
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ToggleButton">
+            <ControlTemplate.Resources>
+              <Storyboard x:Key="OnToggleButtonChecked">
+                <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="path">
+                  <EasingThicknessKeyFrame KeyTime="0" Value="40,0,0,0"/>
+                </ThicknessAnimationUsingKeyFrames>
+              </Storyboard>
+              <Storyboard x:Key="OnToggleButtonUnchecked">
+                <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="path">
+                  <EasingThicknessKeyFrame KeyTime="0" Value="0"/>
+                </ThicknessAnimationUsingKeyFrames>
+              </Storyboard>
+            </ControlTemplate.Resources>
+            <Border x:Name="toggleBorder" CornerRadius="13"	Background="Green" Width="60" Height="26"	BorderThickness="1"	BorderBrush="Black">
+              <Grid>
+                <Path x:Name="path">
+                  <Path.Fill>
+                    <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+                      <GradientStop Color="White"/>
+                    </LinearGradientBrush>
+                  </Path.Fill>
+                  <Path.Data>
+                    <GeometryGroup>
+                      <GeometryGroup.Children>
+                        <EllipseGeometry Center="6,12" RadiusX="9" RadiusY="9"/>
+                      </GeometryGroup.Children>
+                    </GeometryGroup>
+                  </Path.Data>
+                </Path>
+              </Grid>
+            </Border>
+            <ControlTemplate.Triggers>
+              <EventTrigger RoutedEvent="ToggleButton.Checked">
+                <BeginStoryboard Storyboard="{StaticResource OnToggleButtonChecked}"/>
+              </EventTrigger>
+              <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                <BeginStoryboard Storyboard="{StaticResource OnToggleButtonUnchecked}"/>
+              </EventTrigger>
+              <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="DimGray"/>
+                <Setter TargetName="toggleBorder" Property="Background" Value="Green"/>
+                <Setter TargetName="toggleBorder" Property="BorderBrush" Value="Green"/>
+              </Trigger>
+              <Trigger Property="IsChecked" Value="False">
+                <Setter TargetName="toggleBorder" Property="Background" Value="LightGray"/>
+                <Setter TargetName="path" Property="Fill">
+                  <Setter.Value>
+                    <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+                      <GradientStop Color="Gray"/>
+                    </LinearGradientBrush>
+                  </Setter.Value>
+                </Setter>
+                <Setter TargetName="path" Property="Data">
+                  <Setter.Value>
+                    <GeometryGroup>
+                      <GeometryGroup.Children>
+                        <EllipseGeometry Center="13,12" RadiusX="9" RadiusY="9"/>
+                      </GeometryGroup.Children>
+                    </GeometryGroup>
+                  </Setter.Value>
+                </Setter>
+              </Trigger>
+            </ControlTemplate.Triggers>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+  </UserControl.Resources>
+  <DockPanel>
+    <GroupBox DockPanel.Dock="Top" Header="Connection">
+      <DockPanel>
+        <DockPanel Margin="5,5,5,5" DockPanel.Dock="Top" LastChildFill="False">
+          <TextBlock Margin="5 0 0 0" Text="CPU: " VerticalAlignment="Center"/>
+          <ComboBox MinWidth="120" ItemsSource="{Binding CpuTypes}" SelectedValue="{Binding CpuType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
+          <TextBlock Text=" IP: " VerticalAlignment="Center"/>
+          <TextBox Text="{Binding IP,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="150" MaxLength="15"/>
+
+          <TextBlock Text=" Rack: " VerticalAlignment="Center"/>
+          <TextBox Text="{Binding Rack,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="40" MaxLength="2" InputScope="Number"/>
+          <TextBlock Text=" Slot: " VerticalAlignment="Center"/>
+          <TextBox Text="{Binding Slot,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="40" MaxLength="2" InputScope="Number"/>
+
+          <Button DockPanel.Dock="Right" Content=" Connect ">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="Click">
+                <i:CallMethodAction TargetObject="{Binding }" MethodName="ButtonConnect_Click"/>
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+          </Button>
+        </DockPanel>
+
+        <DockPanel Margin="5,5,5,5" DockPanel.Dock="Top" LastChildFill="False">
+          <TextBlock Text="Status: "/>
+          <TextBlock Text="{Binding ConnectionStatusString}"/>
+        </DockPanel>
+      </DockPanel>
+    </GroupBox>
+
+    <GroupBox DockPanel.Dock="Top" Header="Monitoring">
+      <DockPanel>
+        <DockPanel Margin="5,5,5,5" DockPanel.Dock="Top" LastChildFill="False">
+          <TextBlock Margin="5 0 0 0" Text=" SubscribeMode: " VerticalAlignment="Center"/>
+          <ComboBox MinWidth="100" ItemsSource="{Binding Item_SubscribeModes}" SelectedValue="{Binding Item_SubscribeMode,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBlock Margin="5 0 0 0" Text=" SubscribeValue: " VerticalAlignment="Center"/>
+          <TextBox Margin="5 0 0 0" Text="{Binding Item_SubscribedValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="80" ToolTip="int only in sample."/>
+
+          <TextBlock Margin="5 0 0 0" Text=" Count: " VerticalAlignment="Center"/>
+          <TextBox Text="{Binding Item_Count,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="50"/>
+        </DockPanel>
+        <Separator DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="1"/>
+
+        <DockPanel Margin="5,5,5,5" DockPanel.Dock="Top" LastChildFill="False">
+          <TextBlock Margin="5 0 0 0" Text=" Name String: " VerticalAlignment="Center"/>
+          <TextBox Margin="5 0 0 0" Text="{Binding Item_NameString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="150"/>
+
+          <Button DockPanel.Dock="Right" Content=" New monitoring by NameString " ToolTip="New monitoring by NameString">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="Click">
+                <i:CallMethodAction TargetObject="{Binding }" MethodName="ButtonMonitoringByNameString_Click"/>
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+          </Button>
+        </DockPanel>
+        <Separator DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="1"/>
+        
+        <DockPanel Margin="5,5,5,5" DockPanel.Dock="Top" LastChildFill="False">
+          <TextBlock Margin="5 0 0 0" Text=" AreaType: " VerticalAlignment="Center"/>
+          <ComboBox MinWidth="70" ItemsSource="{Binding Item_AreaTypes}" SelectedValue="{Binding Item_AreaType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBlock Margin="5 0 0 0" Text=" AreaIndex: " VerticalAlignment="Center"/>
+          <TextBox Text="{Binding Item_AreaIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="30"/>
+
+          <TextBlock Margin="5 0 0 0" Text=" VarType: " VerticalAlignment="Center"/>
+          <ComboBox MinWidth="80" ItemsSource="{Binding Item_VarTypes}" SelectedValue="{Binding Item_VarType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBlock Margin="5 0 0 0" Text=" Address: " VerticalAlignment="Center"/>
+          <TextBox Text="{Binding Item_Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="50"/>
+
+          <TextBlock Margin="5 0 0 0" Text=" BitIndex: " VerticalAlignment="Center"/>
+          <ComboBox MinWidth="50" ItemsSource="{Binding Item_BitIndexs}" SelectedValue="{Binding Item_BitIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
+          <Button Margin="5 0 0 0" DockPanel.Dock="Right" Content=" New monitoring by paras " ToolTip=" New monitoring by paras ">
+            <i:Interaction.Triggers>
+              <i:EventTrigger EventName="Click">
+                <i:CallMethodAction TargetObject="{Binding }" MethodName="ButtonMonitoringByParameters_Click"/>
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+          </Button>
+        </DockPanel>
+        <Separator DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="1"/>
+
+        <DockPanel Margin="5,5,5,5" DockPanel.Dock="Top" LastChildFill="False">
+          <TextBlock Text="Message: "/>
+          <TextBlock Text="{Binding MonitoringMessage}"/>
+        </DockPanel>
+        <Separator DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="1"/>
+
+        <DockPanel Margin="5,5,5,5" DockPanel.Dock="Top">
+          <TextBlock Margin="5 0 0 0" Text="Monitoring" VerticalAlignment="Center"/>
+          <ToggleButton Margin="5 0 0 0" Content="IsMonitoring" IsChecked="{Binding IsMonitoring}" OverridesDefaultStyle="True"/>
+          <ListBox ItemsSource="{Binding MonitoringItems}" VerticalContentAlignment="Stretch" MinHeight="60" MaxHeight="200">
+            <ListBox.ItemTemplate>
+              <DataTemplate DataType="{x:Type swa:PLC_DataItem}">
+                <DockPanel LastChildFill="False">
+                  <TextBlock Margin="5 0 0 0" Text="{Binding NameString}"/>
+                  <TextBlock Margin="10 0 0 0" Text="{Binding AreaType}"/>
+                  <TextBlock Margin="2 0 0 0" Text="{Binding AreaIndex}"/>
+                  <TextBlock Margin="10 0 0 0" Text="{Binding VarType}"/>
+
+                  <TextBlock Margin="10 0 0 0" Text="address = "/>
+                  <TextBlock Margin="2 0 0 0" Text="{Binding Address}"/>
+
+                  <TextBlock Margin="10 0 0 0" Text="count = "/>
+                  <TextBlock Margin="2 0 0 0" Text="{Binding ItemCount}"/>
+
+                  <TextBlock Margin="10 0 0 0" Text="subscribe mode: "/>
+                  <TextBlock Margin="2 0 0 0" Text="{Binding SubscribeMode}"/>
+                </DockPanel>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </DockPanel>
+        <Separator DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="1"/>
+
+        <TextBlock Margin="5 5 0 0" Text="Subscribe Events" Grid.Row="2" Grid.Column="0"/>
+        <TextBox Margin="5 0 5 5" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" IsReadOnly="True" Text="{Binding SubscribeEventsMessage,Mode=OneWay}" 
+                 TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto"/>
+      </DockPanel>
+    </GroupBox>
+  </DockPanel>
+</UserControl>
