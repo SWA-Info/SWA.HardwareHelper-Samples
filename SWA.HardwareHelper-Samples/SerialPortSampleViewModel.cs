@@ -106,19 +106,19 @@ namespace SWA.HardwareHelper_Samples
         if (flagBytes.Length > 0)
         {
           _serialPort = new SerialPort(SerialPortInfoSelected, flagBytes[0]);
-          _serialPort.EventReceiveDataHandle += EventSerialPortDataArrivedHandler;
-          RecievedDataString = "";
         }
       }
       else
       {
         _serialPort = new SerialPort(SerialPortInfoSelected, (uint)FixedLengthInByte);
-        _serialPort.EventReceiveDataHandle += EventSerialPortDataArrivedHandler;
-        RecievedDataString = "";
       }
       int baudrate = (int)SerialPortBaudRate;
       if (null != _serialPort)
       {
+        RecievedDataString = "";
+        _serialPort.EventReceiveDataHandle += EventSerialPortDataArrivedHandler;
+        _serialPort.EventReceiveErrorHandle += EventSerialPortErrorArrivedHandler;
+
         if (_serialPort.Open(SerialPortBaudRate, SerialPortParity, SerialPortDataBitLength, SerialPortStopBitsLength))
         { IsCloseButtonEnabled = true; OnPropertyChanged(nameof(IsCloseButtonEnabled)); }
       }
