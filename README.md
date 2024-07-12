@@ -11,6 +11,16 @@ Samples can be found in [SWA_HardwareHelper_Samples](https://github.com/SWA-Info
 
 ### Features
 
+New in 2.1.0
+* Extend S7 varTypes, new var types:
+  *LWORD* (64 bits)
+  *SInt* (8 bits)
+  *LInt* (64 bits)
+  *USInt* (8 bits)
+  *UInt* (16 bits)
+  *UDInt* (32 bits)
+  *ULInt* (64 bits)
+
 #### Serial Port
 * Scan the serial ports on the PC, and choose whether to include virtual serial ports.
 * Get serial port information, such as name, port number, status, etc.
@@ -21,9 +31,6 @@ Samples can be found in [SWA_HardwareHelper_Samples](https://github.com/SWA-Info
 * Provides value monitoring function and synchronizes PLC data in real time.
 * Provides value change notification events and supports subscription of rising and falling edges of value changes.
 
-## Getting Started
-[SWA.HardwareHelper-Samples](https://github.com/SWA-Info/SWA_HardwareHelper_Samples)
-
 ## Documents
-* [Serial Port](SWA.HardwareHelper-Samples/Documents/SerialPort.md)
-* [S7 PLC](SWA.HardwareHelper-Samples/Documents/S7Plc.md)
+* [Serial Port](SWA.HardwareHelper/Documents/SerialPort.md)
+* [S7 PLC](SWA.HardwareHelper/Documents/S7Plc.md)
