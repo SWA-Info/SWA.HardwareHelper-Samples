@@ -120,7 +120,7 @@ namespace SWA.HardwareHelper_Samples
       {
         PLC_DataItem item;
         if (Item_VarType == S7PLC_VarType.Bit)
-          item = new(Item_AreaType, Item_AreaIndex, Item_VarType, Item_Address, S7PLC_BitIndex.Bit_0, Item_SubscribeMode);
+          item = new(Item_AreaType, Item_AreaIndex, Item_VarType, Item_Address, Item_BitIndex, Item_SubscribeMode);
         else
           item = new(Item_AreaType, Item_AreaIndex, Item_VarType, Item_Address, Item_SubscribeMode);
 

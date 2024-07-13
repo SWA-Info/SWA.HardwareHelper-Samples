@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SWA.HardwareHelper-Samples": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}
