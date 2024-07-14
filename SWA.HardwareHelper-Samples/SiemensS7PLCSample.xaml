@@ -119,9 +119,10 @@
           <TextBlock Margin="5 0 0 0" Text=" SubscribeMode: " VerticalAlignment="Center"/>
           <ComboBox MinWidth="100" ItemsSource="{Binding Item_SubscribeModes}" SelectedValue="{Binding Item_SubscribeMode,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
           <TextBlock Margin="5 0 0 0" Text=" SubscribeValue: " VerticalAlignment="Center"/>
-          <TextBox Margin="5 0 0 0" Text="{Binding Item_SubscribedValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="80" ToolTip="int only in sample."/>
+          <TextBox Margin="5 0 0 0" Text="{Binding Item_SubscribedValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="80" ToolTip=""/>
+          <TextBlock Margin="5 0 0 0" Text="(byte/int/uint only in sample.)" VerticalAlignment="Center"/>
 
-          <TextBlock Margin="5 0 0 0" Text=" Count: " VerticalAlignment="Center"/>
+          <TextBlock Margin="10 0 0 0" Text=" Count: " VerticalAlignment="Center"/>
           <TextBox Text="{Binding Item_Count,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="50"/>
         </DockPanel>
         <Separator DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="1"/>
@@ -130,7 +131,7 @@
           <TextBlock Margin="5 0 0 0" Text=" Name String: " VerticalAlignment="Center"/>
           <TextBox Margin="5 0 0 0" Text="{Binding Item_NameString,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="150"/>
 
-          <Button DockPanel.Dock="Right" Content=" New monitoring by NameString " ToolTip="New monitoring by NameString">
+          <Button DockPanel.Dock="Right" Content=" New monitoring by NameString " ToolTip="New monitoring by NameString" IsEnabled="{Binding IsNewMonitoringEnabled,Mode=OneWay}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
                 <i:CallMethodAction TargetObject="{Binding }" MethodName="ButtonMonitoringByNameString_Click"/>
@@ -139,7 +140,7 @@
           </Button>
         </DockPanel>
         <Separator DockPanel.Dock="Top" HorizontalAlignment="Stretch" Height="1"/>
-        
+
         <DockPanel Margin="5,5,5,5" DockPanel.Dock="Top" LastChildFill="False">
           <TextBlock Margin="5 0 0 0" Text=" AreaType: " VerticalAlignment="Center"/>
           <ComboBox MinWidth="70" ItemsSource="{Binding Item_AreaTypes}" SelectedValue="{Binding Item_AreaType,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
@@ -154,7 +155,7 @@
           <TextBlock Margin="5 0 0 0" Text=" BitIndex: " VerticalAlignment="Center"/>
           <ComboBox MinWidth="50" ItemsSource="{Binding Item_BitIndexs}" SelectedValue="{Binding Item_BitIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
 
-          <Button Margin="5 0 0 0" DockPanel.Dock="Right" Content=" New monitoring by paras " ToolTip=" New monitoring by paras ">
+          <Button Margin="5 0 0 0" DockPanel.Dock="Right" Content=" New monitoring by paras " ToolTip=" New monitoring by paras " IsEnabled="{Binding IsNewMonitoringEnabled,Mode=OneWay}">
             <i:Interaction.Triggers>
               <i:EventTrigger EventName="Click">
                 <i:CallMethodAction TargetObject="{Binding }" MethodName="ButtonMonitoringByParameters_Click"/>
@@ -176,20 +177,29 @@
           <ListBox ItemsSource="{Binding MonitoringItems}" VerticalContentAlignment="Stretch" MinHeight="60" MaxHeight="200">
             <ListBox.ItemTemplate>
               <DataTemplate DataType="{x:Type swa:PLC_DataItem}">
-                <DockPanel LastChildFill="False">
-                  <TextBlock Margin="5 0 0 0" Text="{Binding NameString}"/>
-                  <TextBlock Margin="10 0 0 0" Text="{Binding AreaType}"/>
-                  <TextBlock Margin="2 0 0 0" Text="{Binding AreaIndex}"/>
-                  <TextBlock Margin="10 0 0 0" Text="{Binding VarType}"/>
+                <DockPanel Margin="1" LastChildFill="False" Background="#FFDAD6D6" HorizontalAlignment="Stretch">
+                  <DockPanel LastChildFill="False" DockPanel.Dock="Top">
+                    <TextBlock Margin="5 0 0 0" Text="{Binding NameString}"/>
+                    <TextBlock Margin="10 0 0 0" Text="{Binding AreaType}"/>
+                    <TextBlock Margin="2 0 0 0" Text="{Binding AreaIndex}"/>
+                    <TextBlock Margin="10 0 0 0" Text="{Binding VarType}"/>
 
-                  <TextBlock Margin="10 0 0 0" Text="address = "/>
-                  <TextBlock Margin="2 0 0 0" Text="{Binding Address}"/>
+                    <TextBlock Margin="10 0 0 0" Text="address = "/>
+                    <TextBlock Margin="2 0 0 0" Text="{Binding Address}"/>
 
-                  <TextBlock Margin="10 0 0 0" Text="count = "/>
-                  <TextBlock Margin="2 0 0 0" Text="{Binding ItemCount}"/>
+                    <TextBlock Margin="10 0 0 0" Text="bit = "/>
+                    <TextBlock Margin="2 0 0 0" Text="{Binding BitIndex}"/>
 
-                  <TextBlock Margin="10 0 0 0" Text="subscribe mode: "/>
-                  <TextBlock Margin="2 0 0 0" Text="{Binding SubscribeMode}"/>
+                    <TextBlock Margin="10 0 0 0" Text="count = "/>
+                    <TextBlock Margin="2 0 0 0" Text="{Binding ItemCount}"/>
+                  </DockPanel>
+                  <DockPanel LastChildFill="False" DockPanel.Dock="Top">
+                    <TextBlock Margin="10 0 0 0" Text="subscribe mode: "/>
+                    <TextBlock Margin="2 0 0 0" Text="{Binding SubscribeMode}"/>
+
+                    <TextBlock Margin="10 0 0 0" Text="subscribe value: "/>
+                    <TextBlock Margin="2 0 0 0" Text="{Binding SubscribedValue}"/>
+                  </DockPanel>
                 </DockPanel>
               </DataTemplate>
             </ListBox.ItemTemplate>

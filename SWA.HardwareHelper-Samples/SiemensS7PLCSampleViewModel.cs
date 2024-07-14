@@ -29,6 +29,10 @@ namespace SWA.HardwareHelper_Samples
     public short Slot { get; set; } = 1;
 
     public bool IsDisconnectButtonEnabled {  get; set; } = false;
+    public bool IsNewMonitoringEnabled
+    {
+      get { return ((null != _plc) && !IsMonitoring); }
+    }
     public string ConnectionStatusString { get; set; } = "";
     #endregion
 
@@ -43,6 +47,9 @@ namespace SWA.HardwareHelper_Samples
           if (true == value) _plc.StartMonitoring(); else _plc.StopMonitoring();
         }
         OnPropertyChanged(nameof(IsMonitoring));
+
+        //IsNewMonitoringEnabled = !value;
+        OnPropertyChanged(nameof(IsNewMonitoringEnabled));
       }
     }
     public string Item_NameString { get; set; } = "";
@@ -51,7 +58,7 @@ namespace SWA.HardwareHelper_Samples
       get { return Enum.GetValues(typeof(S7PLC_AreaType)).Cast<S7PLC_AreaType>(); }
     }
     public S7PLC_AreaType Item_AreaType { get; set; } = S7PLC_AreaType.DataBlock;
-    public int Item_AreaIndex { get; set; } = 1;
+    public int Item_AreaIndex { get; set; } = 2;
     public IEnumerable<S7PLC_VarType> Item_VarTypes
     {
       get { return Enum.GetValues(typeof(S7PLC_VarType)).Cast<S7PLC_VarType>(); }
@@ -59,7 +66,6 @@ namespace SWA.HardwareHelper_Samples
     public S7PLC_VarType Item_VarType { get; set; } = S7PLC_VarType.Int;
     public int Item_Address {  get; set; } = 0;
     public uint Item_Count { get; set; } = 1;
-    //public short Item_BitIndex { get; set; } = 0;
     public IEnumerable<S7PLC_BitIndex> Item_BitIndexs
     {
       get { return Enum.GetValues(typeof(S7PLC_BitIndex)).Cast<S7PLC_BitIndex>(); }
@@ -115,7 +121,7 @@ namespace SWA.HardwareHelper_Samples
     public void ButtonMonitoringByParameters_Click(object sender, RoutedEventArgs e) 
     {
       if (null == _plc) { MonitoringMessage = "PLC not avaliable."; return; }
-      Thread.Sleep(200); //enum para in wpf will cause a delay when value changed.wait for value change done.
+      
       try
       {
         PLC_DataItem item;
@@ -126,7 +132,7 @@ namespace SWA.HardwareHelper_Samples
 
         if (null != item)
         {
-          //item.SubscribedValue = S7PLC_Helper.GetCSharpTypeValue(this.Item_VarType, this.Item_SubscribedValue, (int)this.Item_Count);
+          item.SubscribedValue = S7PLC_Helper.GetCSharpTypeValue(this.Item_VarType, this.Item_SubscribedValue, (int)this.Item_Count);
           item.ItemCount = this.Item_Count;
           _plc.DataItems.Add(item);
           OnPropertyChanged(nameof(MonitoringItems));
@@ -148,17 +154,19 @@ namespace SWA.HardwareHelper_Samples
 
       IsDisconnectButtonEnabled = _plc.IsConnected;
       OnPropertyChanged(nameof(IsDisconnectButtonEnabled));
+
+      OnPropertyChanged(nameof(IsNewMonitoringEnabled));
     }
     private void OnSubscribedDataValueChanged(PLC_DataItem dataItem, S7PLC_ValueChangeType valueChangeType, object? valueFrom, object? valueTo)
     {
       if (valueChangeType == S7PLC_ValueChangeType.ValueIn)
       {
-        SubscribeEventsMessage += string.Format("Value In Event: {0}{1} {2} address:{3} Subscribed:{{4}} From:{{5}} To:{{6}}\r\n"
+        SubscribeEventsMessage += string.Format("Value In Event: {0}{1} {2} address:{3} Subscribed:{4} From:{5} To:{6}\r\n"
         , dataItem.AreaType, dataItem.AreaIndex, dataItem.VarType, dataItem.Address, dataItem.SubscribedValue, valueFrom, valueTo);
       }
       else
       {
-        SubscribeEventsMessage += string.Format("Value Out Event: {0}{1} {2} address:{3} Subscribed:{{4}} From:{{5}} To:{{6}}\r\n"
+        SubscribeEventsMessage += string.Format("Value Out Event: {0}{1} {2} address:{3} Subscribed:{4} From:{5} To:{6}\r\n"
         , dataItem.AreaType, dataItem.AreaIndex, dataItem.VarType, dataItem.Address, dataItem.SubscribedValue, valueFrom, valueTo);
       }
       OnPropertyChanged(nameof(SubscribeEventsMessage));
