@@ -32,5 +32,5 @@ New in 2.1.0
 * Provides value change notification events and supports subscription of rising and falling edges of value changes.
 
 ## Documents
-* [Serial Port](SWA.HardwareHelper/Documents/SerialPort.md)
-* [S7 PLC](SWA.HardwareHelper/Documents/S7Plc.md)
+* [Serial Port](SWA.HardwareHelper-Samples/Documents/SerialPort.md)
+* [S7 PLC](SWA.HardwareHelper-Samples/Documents/S7Plc.md)
